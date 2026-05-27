@@ -641,17 +641,35 @@ function loadModel() {
     }
 }
 
-// === Global Model Initialization ===
-// We create the layers globally so they retain their memory (weights) between clicks
-const convLayer = new Conv2D(8, 3);
-const reluLayer = new ReLU();
-const poolLayer = new MaxPool2D(2, 2);
-const flattenLayer = new Flatten();
-const denseLayer = new Dense(1352, 3); 
-const softmaxLayer = new Softmax();
+// === Global Model Variables ===
+let convLayer, reluLayer, poolLayer, flattenLayer, denseLayer, softmaxLayer;
+let currentNumFilters = null;
+let currentFilterSize = null;
+let trainingData = []; 
 
-// === Training Dataset (stored in memory) ===
-let trainingData = []; // Each entry: { pixels: [...], label: 0|1|2 }
+// === Model Builder Function ===
+function buildModel(numFilters, filterSize) {
+    const convOutputSize = MODEL_INPUT_SIZE - filterSize + 1;
+    const poolOutputSize = Math.floor(convOutputSize / 2);
+    const flattenedSize = (poolOutputSize ** 2) * numFilters;
+    
+    convLayer = new Conv2D(numFilters, filterSize);
+    reluLayer = new ReLU();
+    poolLayer = new MaxPool2D(2, 2);
+    flattenLayer = new Flatten();
+    denseLayer = new Dense(flattenedSize, 3);
+    softmaxLayer = new Softmax();
+    
+    currentNumFilters = numFilters;
+    currentFilterSize = filterSize;
+    console.log(`Model built: ${numFilters} filters, size ${filterSize}, flattened size: ${flattenedSize}`);
+}
+
+// Initialize with default UI values on page load
+buildModel(
+    parseInt(document.getElementById('filtersInput').value),
+    parseInt(document.getElementById('filterSizeInput').value)
+);
 
 loadModel();
 
@@ -676,62 +694,38 @@ function modelBackward(lossGradient, lr) {
 }
 
 trainBtn.addEventListener('click', () => {
-    let label = prompt("What did you draw? Enter 0 for Circle, 1 for Square, 2 for Triangle:");
-    if (label === null || label === "") return;
-    const targetIndex = parseInt(label);
-
-    // Save this drawing to the dataset
-    const pixels = getPixelData();
-    trainingData.push({ pixels: pixels, label: targetIndex });
-
+    const numFilters = parseInt(document.getElementById('filtersInput').value);
+    const filterSize = parseInt(document.getElementById('filterSizeInput').value);
     const lr = parseFloat(document.getElementById('lrInput').value);
     const epochs = parseInt(document.getElementById('epochsInput').value);
-
-    let finalLoss = 0;
-
-    // Train on ALL stored examples for each epoch
-    for (let e = 1; e <= epochs; e++) {
-        
-        // Shuffle the dataset each epoch to prevent order bias
-        let shuffled = trainingData.slice().sort(() => Math.random() - 0.5);
-        
-        let totalLoss = 0;
-        let correct = 0;
-
-        for (let sample of shuffled) {
-            const inputMatrix = toMatrix(sample.pixels, MODEL_INPUT_SIZE);
-
-            // Forward pass
-            const predictions = modelForward(inputMatrix);
-
-            // Loss
-            const { loss, gradient } = computeLossAndGradient(predictions, sample.label);
-            totalLoss += loss;
-
-            // Check accuracy
-            const predicted = predictions.indexOf(Math.max(...predictions));
-            if (predicted === sample.label) correct++;
-
-            // Backward pass
-            modelBackward(gradient, lr);
-        }
-
-        finalLoss = totalLoss / trainingData.length;
-        const accuracy = (correct / trainingData.length * 100).toFixed(1);
-
-        // Update UI every 10 epochs
-        if (e % 10 === 0 || e === epochs) {
-            document.getElementById('currentEpoch').innerText = `${e} / ${epochs}`;
-            document.getElementById('currentLoss').innerText = finalLoss.toFixed(4);
-            document.getElementById('currentAccuracy').innerText = accuracy + "%";
-        }
+    
+    // Rebuild only if architecture changed
+    if (numFilters !== currentNumFilters || filterSize !== currentFilterSize) {
+        if (!confirm("Changing architecture will reset model weights. Continue?")) return;
+        trainingData = []; 
+        buildModel(numFilters, filterSize);
     }
-
-    document.getElementById('trainingStatus').innerText = 
-        `Training done! Dataset size: ${trainingData.length} samples (${trainingData.filter(d=>d.label===0).length} circles, ${trainingData.filter(d=>d.label===1).length} squares, ${trainingData.filter(d=>d.label===2).length} triangles)`;
-
+    
+    let label = prompt("What did you draw? (0: Circle, 1: Square, 2: Triangle)");
+    if (label === null || label === "") return;
+    const targetIndex = parseInt(label);
+    
+    const pixels = getPixelData(); 
+    const inputMatrix = toMatrix(pixels, MODEL_INPUT_SIZE); 
+    
+    let finalLoss = 0;
+    
+    for (let e = 1; e <= epochs; e++) {
+        const predictions = modelForward(inputMatrix);
+        const { loss, gradient } = computeLossAndGradient(predictions, targetIndex);
+        finalLoss = loss;
+        modelBackward(gradient, lr);
+    }
+    
     saveModel();
-    alert(`Trained on ${trainingData.length} total samples. Loss: ${finalLoss.toFixed(4)}`);
+    document.getElementById('trainingStatus').innerText = "Training completed!";
+    document.getElementById('currentLoss').innerText = finalLoss.toFixed(4);
+    alert(`Trained! Loss: ${finalLoss.toFixed(4)}`);
 });
 
 // === Predict Button ===
