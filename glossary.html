@@ -16,7 +16,7 @@
     </header>
 
     <main class="glossary-container">
-        <p>Below are at least 40 key terms appearing behind the code and in the neural network display:</p>
+        <p>Below are 44 key terms appearing in the code and underlying neural network theory:</p>
         
         <table class="glossary-table">
             <thead>
@@ -29,15 +29,228 @@
             <tbody>
                 <tr>
                     <td><strong>CNN (Convolutional Neural Network)</strong></td>
-                    <td>Basic Terms</td>
+                    <td>Architecture</td>
                     <td>A neural network designed for processing structured array data, such as image pixels, using local filtering layers.</td>
+                </tr>
+                <tr>
+                    <td><strong>Convolution</strong></td>
+                    <td>Architecture</td>
+                    <td>A mathematical operation where a filter slides over an input matrix to detect spatial features like edges or shapes.</td>
+                </tr>
+                <tr>
+                    <td><strong>Filter / Kernel</strong></td>
+                    <td>Architecture</td>
+                    <td>A small matrix of weights (e.g., 3x3) applied during convolution to extract specific features from the input.</td>
+                </tr>
+                <tr>
+                    <td><strong>Feature Map</strong></td>
+                    <td>Architecture</td>
+                    <td>The 2D output matrix resulting from applying a single filter across the input image.</td>
+                </tr>
+                <tr>
+                    <td><strong>Pooling</strong></td>
+                    <td>Architecture</td>
+                    <td>A downsampling operation used to reduce the spatial dimensions (width and height) of feature maps.</td>
+                </tr>
+                <tr>
+                    <td><strong>Max Pooling</strong></td>
+                    <td>Architecture</td>
+                    <td>A specific pooling type that extracts only the maximum value within a window (e.g., 2x2), providing translation invariance.</td>
+                </tr>
+                <tr>
+                    <td><strong>Neuron / Node</strong></td>
+                    <td>Architecture</td>
+                    <td>A single computational unit in a neural network that receives inputs, multiplies them by weights, adds a bias, and passes the result to an activation function.</td>
+                </tr>
+                <tr>
+                    <td><strong>Dense Layer (Fully Connected)</strong></td>
+                    <td>Architecture</td>
+                    <td>A standard neural network layer where every neuron is connected to all neurons in the previous layer. Used for final classification.</td>
+                </tr>
+                <tr>
+                    <td><strong>Flatten Layer</strong></td>
+                    <td>Architecture</td>
+                    <td>A layer that takes multi-dimensional tensors (e.g., 3D feature maps) and reshapes them into a 1D array for the Dense layer.</td>
+                </tr>
+                <tr>
+                    <td><strong>Stride</strong></td>
+                    <td>Architecture</td>
+                    <td>The number of pixels a filter or pooling window moves across the input matrix at each step.</td>
+                </tr>
+                <tr>
+                    <td><strong>Padding</strong></td>
+                    <td>Architecture</td>
+                    <td>Adding extra pixels (usually zeros) around the border of an input matrix to control the spatial size of the output feature map.</td>
+                </tr>
+                <tr>
+                    <td><strong>Input Layer</strong></td>
+                    <td>Architecture</td>
+                    <td>The initial layer of the network that receives raw data (in our case, the 28x28 normalized canvas pixels).</td>
+                </tr>
+                <tr>
+                    <td><strong>Output Layer</strong></td>
+                    <td>Architecture</td>
+                    <td>The final layer that produces the model's predictions (in our case, 3 neurons for Circle, Square, and Triangle).</td>
+                </tr>
+                <tr>
+                    <td><strong>Receptive Field</strong></td>
+                    <td>Architecture</td>
+                    <td>The specific region in the input image that a particular CNN feature is looking at.</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Activation Function</strong></td>
+                    <td>Math & Activations</td>
+                    <td>A mathematical equation attached to a neuron that determines whether it should be activated, introducing non-linearity to the model.</td>
+                </tr>
+                <tr>
+                    <td><strong>ReLU (Rectified Linear Unit)</strong></td>
+                    <td>Math & Activations</td>
+                    <td>An activation function that outputs the input directly if it is positive, and outputs zero if it is negative [f(x) = max(0, x)].</td>
+                </tr>
+                <tr>
+                    <td><strong>Softmax</strong></td>
+                    <td>Math & Activations</td>
+                    <td>An activation function used in the output layer to convert raw logits into a probability distribution summing to 1 (100%).</td>
+                </tr>
+                <tr>
+                    <td><strong>Dot Product</strong></td>
+                    <td>Math & Activations</td>
+                    <td>The algebraic operation of multiplying matching elements from two matrices/vectors and summing the results.</td>
+                </tr>
+                <tr>
+                    <td><strong>Matrix Multiplication</strong></td>
+                    <td>Math & Activations</td>
+                    <td>A core operation in neural networks where matrices of inputs and weights are multiplied to compute layer outputs.</td>
+                </tr>
+                <tr>
+                    <td><strong>Logits</strong></td>
+                    <td>Math & Activations</td>
+                    <td>The raw, unnormalized scores outputted by the final Dense layer before they are passed into the Softmax function.</td>
+                </tr>
+                <tr>
+                    <td><strong>Exponential Function (exp)</strong></td>
+                    <td>Math & Activations</td>
+                    <td>Used inside Softmax to exaggerate differences in logits, pushing the highest value closer to 1 and smaller values toward 0.</td>
+                </tr>
+                <tr>
+                    <td><strong>Tensor</strong></td>
+                    <td>Math & Activations</td>
+                    <td>A multi-dimensional array of numbers (e.g., the 3D arrays holding our feature maps are tensors).</td>
+                </tr>
+                <tr>
+                    <td><strong>Numerical Stability</strong></td>
+                    <td>Math & Activations</td>
+                    <td>Mathematical tricks (like subtracting the max value before Softmax) used in programming to prevent numbers from becoming too large (Infinity) or too small (NaN).</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Forward Pass</strong></td>
+                    <td>Training Terms</td>
+                    <td>The process of pushing input data through the network layers from start to finish to generate a prediction.</td>
                 </tr>
                 <tr>
                     <td><strong>Backpropagation</strong></td>
                     <td>Training Terms</td>
-                    <td>The algorithm used to compute the gradient of the loss function to update the network weights from end to beginning.</td>
+                    <td>The algorithm used to compute the gradient of the loss function, distributing the error backwards to update the network weights.</td>
                 </tr>
-                </tbody>
+                <tr>
+                    <td><strong>Weights</strong></td>
+                    <td>Training Terms</td>
+                    <td>The learnable parameters inside filters and dense layers that determine the strength of connections between neurons.</td>
+                </tr>
+                <tr>
+                    <td><strong>Biases</strong></td>
+                    <td>Training Terms</td>
+                    <td>Learnable constant values added to the dot product of inputs and weights, allowing the activation function to shift.</td>
+                </tr>
+                <tr>
+                    <td><strong>Learning Rate</strong></td>
+                    <td>Training Terms</td>
+                    <td>A hyperparameter that controls how much to change the model in response to the estimated error each time the model weights are updated.</td>
+                </tr>
+                <tr>
+                    <td><strong>Loss / Cost Function</strong></td>
+                    <td>Training Terms</td>
+                    <td>A mathematical method of evaluating how well the specific algorithm models the given data (how far predictions are from reality).</td>
+                </tr>
+                <tr>
+                    <td><strong>Categorical Cross-Entropy</strong></td>
+                    <td>Training Terms</td>
+                    <td>The specific loss function used for multi-class classification, heavily penalizing predictions that are confident but wrong.</td>
+                </tr>
+                <tr>
+                    <td><strong>Epoch</strong></td>
+                    <td>Training Terms</td>
+                    <td>One complete pass of the training dataset through the neural network algorithm.</td>
+                </tr>
+                <tr>
+                    <td><strong>Batch / Batch Size</strong></td>
+                    <td>Training Terms</td>
+                    <td>A set of multiple samples processed together before updating weights (In our manual implementation, batch size is effectively 1).</td>
+                </tr>
+                <tr>
+                    <td><strong>Accuracy</strong></td>
+                    <td>Training Terms</td>
+                    <td>A metric measuring the percentage of correct predictions out of all predictions made.</td>
+                </tr>
+                <tr>
+                    <td><strong>Overfitting</strong></td>
+                    <td>Training Terms</td>
+                    <td>When a model learns the training data too well, capturing noise instead of general patterns, leading to poor performance on new data.</td>
+                </tr>
+                <tr>
+                    <td><strong>Gradient</strong></td>
+                    <td>Training Terms</td>
+                    <td>A vector indicating the direction and rate of fastest increase of the loss function. We step in the opposite direction to minimize loss.</td>
+                </tr>
+                <tr>
+                    <td><strong>Gradient Descent</strong></td>
+                    <td>Training Terms</td>
+                    <td>The optimization algorithm used to minimize the loss function by iteratively moving in the direction of steepest descent.</td>
+                </tr>
+                <tr>
+                    <td><strong>Underfitting</strong></td>
+                    <td>Training Terms</td>
+                    <td>When a model is too simple or hasn't trained long enough to capture the underlying trend of the data.</td>
+                </tr>
+                <tr>
+                    <td><strong>Convergence</strong></td>
+                    <td>Training Terms</td>
+                    <td>The state during training when the loss stops decreasing significantly, meaning the model has settled on its final parameters.</td>
+                </tr>
+                <tr>
+                    <td><strong>Argmax</strong></td>
+                    <td>Training Terms</td>
+                    <td>The mathematical operation used at the end of predictions to find the index (class) associated with the highest probability.</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Canvas API</strong></td>
+                    <td>Web & Implementation</td>
+                    <td>A JavaScript feature used to draw graphics on a web page. Used in this project to capture user drawings.</td>
+                </tr>
+                <tr>
+                    <td><strong>Grayscale Normalization</strong></td>
+                    <td>Web & Implementation</td>
+                    <td>The process of converting colored pixels to a single intensity value, and scaling it between 0.0 and 1.0 for neural network input.</td>
+                </tr>
+                <tr>
+                    <td><strong>LocalStorage</strong></td>
+                    <td>Web & Implementation</td>
+                    <td>A web storage object allowing JavaScript sites to store key/value pairs in a web browser with no expiration date (used to save model weights).</td>
+                </tr>
+                <tr>
+                    <td><strong>JSON Serialization</strong></td>
+                    <td>Web & Implementation</td>
+                    <td>Converting complex JavaScript objects (like multidimensional weight arrays) into a string format (JSON) so they can be saved in LocalStorage.</td>
+                </tr>
+                <tr>
+                    <td><strong>Event Listener</strong></td>
+                    <td>Web & Implementation</td>
+                    <td>A procedure in JavaScript that waits for an event to occur (like a mouse click or drawing on the canvas) to trigger functions.</td>
+                </tr>
+            </tbody>
         </table>
     </main>
 
