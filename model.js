@@ -764,14 +764,3 @@ testBtn.addEventListener('click', () => {
         `;
     }
 });
-
-// TEMPORARY - add this button to HTML, click after training, copy the console output
-document.getElementById('exportBtn').addEventListener('click', () => {
-    const modelData = {
-        convFilters: convLayer.filters,
-        convBiases: convLayer.biases,
-        denseWeights: denseLayer.weights,
-        denseBiases: denseLayer.biases
-    };
-    console.log(JSON.stringify(modelData));
-});
